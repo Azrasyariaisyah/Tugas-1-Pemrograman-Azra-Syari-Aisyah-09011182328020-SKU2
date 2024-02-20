@@ -1,0 +1,45 @@
+import javax.sound.midi.*;
+
+public class returnmidi1 {
+    public static void main(String[] args) {
+        // Menjalankan metode untuk memainkan nada
+        int note = playMidiNote();
+
+        // Menampilkan nada yang dimainkan
+        System.out.println("Nada yang dimainkan: " + note);
+    }
+
+    // Metode untuk memainkan sebuah nada MIDI
+    public static int playMidiNote() {
+        try {
+            // Membuat sequencer dan membukanya
+            Sequencer sequencer = MidiSystem.getSequencer();
+            sequencer.open();
+
+            // Membuat sebuah sequence
+            Sequence sequence = new Sequence(Sequence.PPQ, 4);
+            Track track = sequence.createTrack();
+
+            // Menambahkan sebuah note ke track
+            ShortMessage a = new ShortMessage();
+            a.setMessage(ShortMessage.NOTE_ON, 0, 60, 100);
+            MidiEvent noteOn = new MidiEvent(a, 1);
+            track.add(noteOn);
+
+            ShortMessage b = new ShortMessage();
+            b.setMessage(ShortMessage.NOTE_OFF, 0, 60, 100);
+            MidiEvent noteOff = new MidiEvent(b, 16);
+            track.add(noteOff);
+
+            // Memutar sequence
+            sequencer.setSequence(sequence);
+            sequencer.start();
+
+            // Mengembalikan nilai note yang dimainkan
+            return 60;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return -1; // Mengembalikan nilai -1 jika terjadi kesalahan
+        }
+    }
+}
